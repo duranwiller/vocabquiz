@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101529">
+<title>Vocab Lab — 20-Word Quiz</title>
+<style>
+:root{color-scheme:dark;--bg:#0c1020;--panel:#171d34;--panel2:#202945;--line:#35405f;--text:#f5f7ff;--muted:#abb7d3;--accent:#a7a1ff;--accent2:#75d9df;--good:#65dbb2;--bad:#ff8e9a;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#25204f 0%,transparent 48%),var(--bg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);min-height:100vh}
+.shell{max-width:1000px;margin:auto;padding:30px 18px 65px}header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:26px;flex-wrap:wrap}.brand{font-size:1.7rem;font-weight:850;letter-spacing:-.055em}.brand span{color:var(--accent2)}.pill{font-size:.85rem;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:6px 12px}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(1.8rem,4vw,3rem);letter-spacing:-.055em;line-height:1.15;margin-bottom:12px}h2{letter-spacing:-.025em}p{color:var(--muted)}.hero{padding:28px 0 14px}.eyebrow{color:var(--accent2);font-weight:750;text-transform:uppercase;font-size:.75rem;letter-spacing:.14em;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.mode{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;text-align:left;color:inherit;cursor:pointer;transition:transform .15s,border-color .15s,background .15s;min-height:220px}.mode:hover,.mode:focus-visible{transform:translateY(-2px);border-color:var(--accent);background:var(--panel2)}.mode .symbol{font-size:1.75rem;margin-bottom:12px}.mode h2{font-size:1.17rem;margin-bottom:8px}.mode p{font-size:.91rem;margin:0}.mode strong{display:inline-block;color:var(--accent2);margin-top:14px;font-size:.83rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-top:20px}.settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;align-items:end}.field label{display:block;color:var(--muted);font-size:.84rem;font-weight:700;margin-bottom:8px}select,input{width:100%;background:#10172c;color:var(--text);border:1px solid #485579;border-radius:12px;padding:13px 12px;font:inherit;outline:none}input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #a7a1ff30}button{font:inherit} .btn{background:var(--accent);color:#13142b;border:none;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer;transition:filter .15s}.btn:hover{filter:brightness(1.1)}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}.btn.danger{background:transparent;border:1px solid var(--line);color:var(--muted)}.actionrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.hidden{display:none!important}
+.quizTop{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.stats{color:var(--muted);font-size:.9rem}.stats b{color:var(--text)}.progress{background:#0b1125;height:10px;border-radius:100px;overflow:hidden;margin:18px 0 23px}.progress>div{background:linear-gradient(90deg,var(--accent),var(--accent2));height:100%;width:0%;transition:width .2s}
+.promptLabel{font-size:.78rem;color:var(--accent2);text-transform:uppercase;letter-spacing:.1em;font-weight:750;margin-bottom:13px}.question{font-weight:800;font-size:clamp(1.35rem,3.5vw,2rem);line-height:1.3;margin-bottom:21px;overflow-wrap:anywhere}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.choice{padding:16px;text-align:left;border:1px solid #475477;border-radius:13px;background:#1c2540;color:var(--text);cursor:pointer;min-height:72px}.choice:hover:not(:disabled),.choice:focus-visible{border-color:var(--accent);background:#283153}.choice:disabled{cursor:default;opacity:.8}.choice.correct{border-color:var(--good);background:#173e39;opacity:1}.choice.wrong{border-color:var(--bad);background:#4a2939;opacity:1}.choice .letter{display:inline-flex;justify-content:center;align-items:center;width:27px;height:27px;border-radius:8px;background:#ffffff13;font-weight:800;color:var(--accent2);margin-right:9px}
+.answerForm{display:flex;gap:10px}.answerForm input{flex:1;min-width:0}.feedback{padding:16px;border:1px solid var(--line);border-radius:13px;margin-top:19px;background:#151e32}.feedback.good{border-color:#367f6f}.feedback.bad{border-color:#945060}.feedback strong{color:var(--text)}.feedback p{margin:6px 0 0}.bottom{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:22px;flex-wrap:wrap}.subtle{font-size:.88rem;color:var(--muted)}
+.score{font-weight:850;font-size:clamp(3rem,10vw,5.5rem);color:var(--accent2);line-height:1}.resultsGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.resultBox{background:#121a31;border:1px solid var(--line);border-radius:12px;padding:15px}.resultBox .big{font-size:1.7rem;font-weight:850}.reviewItem{padding:13px 0;border-bottom:1px solid var(--line)}.reviewItem:last-child{border:0}.reviewItem strong{color:var(--text)}.reviewItem span{color:var(--muted);font-size:.9rem}.tag{display:inline-block;border-radius:7px;background:#293453;color:var(--accent2);font-size:.74rem;padding:2px 7px;margin-left:5px}.bank{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:15px}.bankItem{background:#121a30;border:1px solid var(--line);border-radius:12px;padding:13px}.bankItem strong{display:block}.bankItem small{color:var(--accent2)}.bankItem p{margin:5px 0 0;font-size:.85rem}.footer{color:#8895b3;text-align:center;margin-top:33px;font-size:.83rem}.toggle{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:.9rem}.toggle input{width:auto;accent-color:#a7a1ff} .note{font-size:.84rem;color:var(--muted);margin-top:10px}
+@media(max-width:730px){.grid{grid-template-columns:1fr}.mode{min-height:0}.settings{grid-template-columns:1fr}.choices{grid-template-columns:1fr}.resultsGrid{grid-template-columns:1fr}.bank{grid-template-columns:1fr}.panel{padding:18px}.shell{padding:18px 14px 50px}.answerForm{flex-direction:column}}
+
+.clue{display:inline-block;padding:10px 16px;border:1px solid #756ab1;border-radius:12px;background:#292442;margin:5px 8px 5px 0;font-size:1.2rem}.posFields{border:0;padding:0;margin:0 0 18px}.posFields legend{color:var(--muted);margin-bottom:12px}.posFields label{display:inline-flex;gap:10px;align-items:center;min-height:52px;padding:12px 16px;margin:4px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);cursor:pointer}.posFields input{width:22px;height:22px;accent-color:var(--accent)}button,input,select{-webkit-tap-highlight-color:transparent}button{touch-action:manipulation}.btn,select{min-height:48px}button:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}.question{word-break:normal}.shell{padding-bottom:max(50px,env(safe-area-inset-bottom))}@media(max-width:730px){.grid{grid-template-columns:1fr 1fr}.mode{padding:16px}.mode h2{font-size:1rem}.mode p{font-size:.85rem}.answerForm .btn,#checkPos{width:100%}.bottom{align-items:stretch}.bottom .btn{width:100%}.posFields label{display:flex;margin:8px 0}.question{font-size:1.45rem}.clue{font-size:1.1rem}.actionrow .btn{flex:1}}@media(max-width:400px){.grid{grid-template-columns:1fr}.mode .symbol{float:right}.mode strong{margin-top:8px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header><div class="brand">vocab<span>lab.</span></div><span class="pill">20 words · 6 quiz modes · no login</span></header>
+<main>
+<section id="home">
+ <div class="hero"><div class="eyebrow">Your vocabulary practice zone</div><h1>Learn the words.<br>Own the test.</h1><p>Practice definitions, synonyms, antonyms, parts of speech, spelling, and words in context. Every session shuffles the questions.</p></div>
+ <div class="grid">
+  <button class="mode" data-mode="easy"><div class="symbol">🎯</div><h2>Easy · Multiple choice</h2><p>Pick the correct definition or part of speech. Great for learning the words.</p><strong>Definitions + grammar →</strong></button>
+  <button class="mode" data-mode="hard"><div class="symbol">⌨️</div><h2>Hard · Type the word</h2><p>Read a definition and type the exact vocabulary word. Spelling counts!</p><strong>Recall + spelling →</strong></button>
+  <button class="mode" data-mode="context"><div class="symbol">🧩</div><h2>Context · Fill the sentence</h2><p>Read a sentence and select the word that fits. Choose 3 options or all 20.</p><strong>Apply the vocabulary →</strong></button>
+  <button class="mode" data-mode="syn"><div class="symbol">🔗</div><h2>Synonyms · Type the word</h2><p>Get 1, 2, or 3 synonyms and type the vocabulary word. Clues cap at the number listed.</p><strong>Similar meanings →</strong></button>
+  <button class="mode" data-mode="ant"><div class="symbol">↔️</div><h2>Antonyms · Type the word</h2><p>Get 1, 2, or 3 antonyms and type the vocabulary word. Feint and fodder are skipped.</p><strong>Opposite meanings →</strong></button>
+  <button class="mode" data-mode="speech"><div class="symbol">✍️</div><h2>Parts of speech</h2><p>See the word and select every part of speech listed in your book. Some have two!</p><strong>Grammar practice →</strong></button>
+ </div>
+ <section class="panel" aria-label="Quiz settings"><h2>Customize your round</h2><div class="settings">
+  <div class="field"><label for="count">Questions</label><select id="count"><option value="10">10 questions</option><option value="20">20 questions</option><option value="40">40 questions (easy only)</option><option value="all">Full practice (all prompts)</option></select></div>
+  <div class="field"><label for="contextOptions">Sentence mode options</label><select id="contextOptions"><option value="3">3 choices</option><option value="20">All 20 words</option></select></div>
+  <div class="field"><label for="order">Question order</label><select id="order"><option value="random">Shuffle</option><option value="alphabetical">Alphabetical</option></select></div>
+  <div class="field"><label for="clueCount">Synonym / antonym clues</label><select id="clueCount"><option value="1">1 clue · hardest</option><option value="2" selected>2 clues</option><option value="3">3 clues · extra help</option></select></div>
+ </div><p class="note">Choose settings, then tap a quiz mode above. Clues are randomly selected and capped at the number in your book. Antonyms has 18 prompts; part-of-speech, synonyms, hard, and context each have 20. Easy mode includes one definition question and one part-of-speech question per word (40 prompts total).</p></section>
+ <div class="actionrow" style="margin-top:18px"><button id="showBank" class="btn secondary">📖 Study word list</button></div>
+ <section id="bankSection" class="panel hidden"><div class="quizTop"><h2 style="margin:0">Your 20-word study list</h2><button id="hideBank" class="btn secondary">Close</button></div><div class="bank" id="bank"></div></section>
+</section>
+<section id="quiz" class="hidden" aria-live="polite">
+ <div class="quizTop"><button class="btn danger" id="exit">← Exit</button><div class="stats"><b id="currentNum">1</b> / <b id="totalNum">20</b> · Score: <b id="liveScore">0</b></div></div>
+ <div class="progress" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressOuter"><div id="progressBar"></div></div>
+ <div class="panel"><div class="promptLabel" id="promptLabel"></div><div class="question" id="question"></div><div id="choices" class="choices"></div>
+  <form id="answerForm" class="answerForm hidden" autocomplete="off" novalidate><label class="hidden" for="typedAnswer">Vocabulary word</label><input id="typedAnswer" placeholder="Type the vocabulary word…" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" enterkeyhint="done"><button class="btn" id="submitAnswer" type="submit">Check answer</button></form>
+  <form id="posForm" class="hidden" novalidate><fieldset class="posFields"><legend>Select all that apply</legend><label><input type="checkbox" value="noun"> Noun</label><label><input type="checkbox" value="verb"> Verb</label><label><input type="checkbox" value="adjective"> Adjective</label></fieldset><button type="submit" class="btn" id="checkPos">Check answer</button></form>
+  <div id="feedback" class="feedback hidden" role="status"></div>
+  <div class="bottom"><span class="subtle" id="modeInfo"></span><button id="next" class="btn hidden">Next question →</button></div>
+ </div>
+</section>
+<section id="results" class="hidden"><div class="hero"><div class="eyebrow">Round complete</div><h1>Your results</h1></div><div class="panel"><div class="score" id="percent">0%</div><p id="resultMessage"></p><div class="resultsGrid"><div class="resultBox"><div class="subtle">Correct answers</div><div class="big" id="correctCount">0 / 20</div></div><div class="resultBox"><div class="subtle">Questions to review</div><div class="big" id="wrongCount">0</div></div></div><div class="actionrow" style="margin-top:20px"><button id="retryMissed" class="btn">Practice missed questions</button><button id="again" class="btn secondary">New round</button></div><h2 style="margin:25px 0 8px">Answer review</h2><div id="review"></div></div></section>
+</main><div class="footer">Made for studying · Runs entirely in your browser · Works on GitHub Pages</div>
+</div>
+<script>
+'use strict';
+// Each entry has the exact lemma, its primary classroom part of speech, a concise definition,
+// and a sentence where only that word naturally fits among this list.
+const WORDS = [
+ {word:'adjourn',pos:'verb',definition:'to suspend or end a meeting, usually until a later time',sentence:'The committee voted to _____ the meeting until Monday.'},
+ {word:'alien',pos:'adjective / noun',definition:'unfamiliar or foreign; also, a being from another world or a foreign national',sentence:'The traditions seemed _____ to someone who had never visited the region.'},
+ {word:'comely',pos:'adjective',definition:'attractive or pleasant in appearance',sentence:'The portrait depicted a _____ young woman with a warm smile.'},
+ {word:'compensate',pos:'verb',definition:'to repay or make up for a loss, service, or injury',sentence:'The company agreed to _____ workers for their overtime.'},
+ {word:'dissolute',pos:'adjective',definition:'lacking moral restraint; given to excessive pleasure-seeking',sentence:'The novel describes a _____ nobleman who wastes his fortune on wild parties.'},
+ {word:'erratic',pos:'adjective',definition:'unpredictable or irregular in behavior or movement',sentence:'The driver’s _____ swerving made the passengers nervous.'},
+ {word:'expulsion',pos:'noun',definition:'the act of forcing someone or something out',sentence:'Repeated serious rule violations led to the student’s _____ from school.'},
+ {word:'feint',pos:'noun / verb',definition:'a deceptive movement meant to distract or mislead an opponent',sentence:'The boxer used a quick _____ to the left before striking with his right hand.'},
+ {word:'fodder',pos:'noun',definition:'food for livestock; also, material used for a particular purpose',sentence:'The farmer stored hay in the barn to use as winter _____ for the cattle.'},
+ {word:'fortify',pos:'verb',definition:'to strengthen or protect against attack or difficulty',sentence:'Engineers built barriers to _____ the town against flooding.'},
+ {word:'illegible',pos:'adjective',definition:'impossible or very difficult to read',sentence:'The handwriting was so _____ that the teacher could not read the answer.'},
+ {word:'jeer',pos:'verb / noun',definition:'to mock or taunt with rude remarks or shouts',sentence:'Some spectators began to _____ at the referee after the call.'},
+ {word:'lucrative',pos:'adjective',definition:'producing a great deal of money or profit',sentence:'Her small software business became surprisingly _____ after its app took off.'},
+ {word:'mediocre',pos:'adjective',definition:'only average in quality; not very good',sentence:'The restaurant earned _____ reviews because the food was merely okay.'},
+ {word:'proliferate',pos:'verb',definition:'to increase or spread rapidly in number',sentence:'Without predators, the invasive insects began to _____ throughout the valley.'},
+ {word:'subjugate',pos:'verb',definition:'to bring under domination or control, often by force',sentence:'The invading empire tried to _____ neighboring peoples.'},
+ {word:'sully',pos:'verb',definition:'to stain, tarnish, or damage something, especially a reputation',sentence:'The cheating scandal threatened to _____ the athlete’s reputation.'},
+ {word:'tantalize',pos:'verb',definition:'to tease or excite by showing something desirable but keeping it out of reach',sentence:'The bakery displayed fresh pastries in the window to _____ hungry passersby.'},
+ {word:'terse',pos:'adjective',definition:'brief and direct, sometimes to the point of seeming rude',sentence:'His _____ reply consisted of just two words: “Not interested.”'},
+ {word:'unflinching',pos:'adjective',definition:'not shrinking back from danger, difficulty, or unpleasant truth',sentence:'The firefighter showed _____ courage while entering the burning building.'}
+];
+const CLUES=[
+['adjourn',['verb'],['postpone','discontinue'],['open','call to order']],
+['alien',['noun','adjective'],['exotic'],['native','endemic']],
+['comely',['adjective'],['good-looking','attractive','bonny'],['plain','homely','unattractive']],
+['compensate',['verb'],['pay back','recompense'],['fail to reward','stiff']],
+['dissolute',['adjective'],['dissipated','debauched','immoral','corrupt'],['chaste','moral','seemly','proper']],
+['erratic',['adjective'],['irregular','inconsistent'],['steady','consistent','dependable']],
+['expulsion',['noun'],['ejection','removal','eviction'],['admittance','admission']],
+['feint',['noun','verb'],['trick','ruse','subterfuge','bluff'],[]],
+['fodder',['noun'],['provender'],[]],
+['fortify',['verb'],['reinforce','shore up'],['weaken','undermine','sap','impair']],
+['illegible',['adjective'],['unreadable','scribbled'],['readable','distinct','clear']],
+['jeer',['verb','noun'],['laugh at','mock','taunt','gibe','insult'],['applaud','praise','applause','plaudits']],
+['lucrative',['adjective'],['gainful','moneymaking'],['unprofitable','losing','in the red']],
+['mediocre',['adjective'],['run-of-the-mill'],['outstanding','distinguished']],
+['proliferate',['verb'],['multiply','mushroom','burgeon'],['decrease','diminish','dwindle','slack off']],
+['subjugate',['verb'],['subdue','vanquish'],['be conquered','submit']],
+['sully',['verb'],['pollute','smear'],['cleanse','purify','decontaminate']],
+['tantalize',['verb'],['tempt','lead on',"make one’s mouth water"],['satisfy','fulfill','gratify']],
+['terse',['adjective'],['succinct','crisp','short and sweet'],['wordy','diffuse','prolix']],
+['unflinching',['adjective'],['resolute','steadfast','unwavering'],['irresolute','wavering','vacillating']]
+];
+for(const [word,parts,syn,ant] of CLUES){Object.assign(WORDS.find(w=>w.word===word),{parts,syn,ant,pos:[...parts].sort().join(' / ')})}
+const isTyped=q=>['hard','syn','ant'].includes(q.kind);
+const $=id=>document.getElementById(id);
+const rand=(arr)=>{const copy=[...arr];for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}return copy};
+const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const normalize=s=>String(s).trim().toLowerCase().replace(/\s+/g,' ');
+let mode='easy',questions=[],index=0,score=0,attempts=[],answered=false;
+function page(which){for(const id of ['home','quiz','results'])$(id).classList.toggle('hidden',id!==which);window.scrollTo({top:0,behavior:'instant'});}
+function buildQuestions(selected,missed){
+ if(missed)return missed.map(q=>({...q}));
+ let pool=mode==='easy'?WORDS.flatMap(w=>[{word:w,kind:'definition'},{word:w,kind:'pos'}]):WORDS.filter(w=>mode!=='ant'||w.ant.length).map(w=>({word:w,kind:mode}));
+ if($('order').value==='random')pool=rand(pool);else pool.sort((a,b)=>a.word.word.localeCompare(b.word.word)||a.kind.localeCompare(b.kind));
+ const choice=$('count').value;let limit=choice==='all'?pool.length:Number(choice);return pool.slice(0,Math.min(limit,pool.length));
+}
+function start(selected,missed=null){mode=selected;questions=buildQuestions(selected,missed);index=0;score=0;attempts=[];page('quiz');render();}
+function optionsFor(q){const w=q.word;
+ if(q.kind==='definition'){
+  const others=rand(WORDS.filter(x=>x.word!==w.word)).slice(0,3).map(x=>x.definition);
+  return rand([{label:w.definition,correct:true},...others.map(label=>({label,correct:false}))]);
+ }
+ if(q.kind==='pos'){
+  // Test primary part of speech, with legitimate double-role vocabulary preserved.
+  const labels=['noun','verb','adjective','noun / verb','adjective / noun','adverb'].map(p=>p.split(' / ').sort().join(' / '));
+  const wrong=rand(labels.filter(x=>x!==w.pos)).slice(0,3);
+  return rand([{label:w.pos,correct:true},...wrong.map(label=>({label,correct:false}))]);
+ }
+ const n=$('contextOptions').value==='20'?20:3;
+ const distractors=rand(WORDS.filter(x=>x.word!==w.word)).slice(0,n-1).map(x=>({label:x.word,correct:false}));
+ return rand([{label:w.word,correct:true},...distractors]);
+}
+function render(){answered=false;const q=questions[index],w=q.word;
+ $('currentNum').textContent=index+1;$('totalNum').textContent=questions.length;$('liveScore').textContent=score;
+ $('progressBar').style.width=`${100*index/questions.length}%`;$('progressOuter').setAttribute('aria-valuenow',Math.round(100*index/questions.length));
+ $('feedback').className='feedback hidden';$('feedback').innerHTML='';$('next').classList.add('hidden');
+ $('posForm').classList.add('hidden');$('checkPos').disabled=false;document.querySelectorAll('#posForm input').forEach(c=>{c.checked=false;c.disabled=false});
+ $('choices').innerHTML='';$('answerForm').classList.add('hidden');$('typedAnswer').value='';$('typedAnswer').disabled=false;$('submitAnswer').disabled=false;
+ if(q.kind==='definition'){$('promptLabel').textContent='Easy · Word meaning';$('question').textContent=`What does “${w.word}” mean?`;}
+ else if(q.kind==='pos'){$('promptLabel').textContent='Easy · Part of speech';$('question').textContent=`What part(s) of speech can “${w.word}” be?`;}
+ else if(q.kind==='speech'){$('promptLabel').textContent='Part of speech · Select all';$('question').textContent=w.word;}
+ else if(['syn','ant'].includes(q.kind)){$('promptLabel').textContent=(q.kind==='syn'?'Synonyms':'Antonyms')+' · Type the word';$('question').replaceChildren();for(const clue of rand(w[q.kind]).slice(0,Number($('clueCount').value))){const chip=document.createElement('span');chip.className='clue';chip.textContent=clue;$('question').appendChild(chip)}}
+ else if(q.kind==='hard'){$('promptLabel').textContent='Hard · Type the word';$('question').textContent=w.definition;}
+ else {$('promptLabel').textContent='Context · Complete the sentence';$('question').textContent=w.sentence.replace('_____','________');}
+ $('modeInfo').textContent=isTyped(q)?'Spelling counts · Capitalization does not':q.kind==='context'?'Choose the best word for the sentence':q.kind==='speech'?'Select every listed part of speech':'Choose one correct answer';
+ if(q.kind==='speech'){$('posForm').classList.remove('hidden');return;}
+ if(isTyped(q)){$('answerForm').classList.remove('hidden');$('typedAnswer').focus();return;}
+ const opts=optionsFor(q);for(let i=0;i<opts.length;i++){
+  const opt=opts[i],button=document.createElement('button');button.type='button';button.className='choice';button.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${escapeHTML(opt.label)}`;
+  button.addEventListener('click',()=>grade(opt.correct,opt.label,opts));$('choices').appendChild(button);
+ }
+}
+function grade(correct,submitted,opts){if(answered)return;answered=true;const q=questions[index],w=q.word;
+ if(correct)score++;attempts.push({question:q,correct,submitted});$('liveScore').textContent=score;
+ if(opts){const buttons=[...$('choices').children];buttons.forEach((b,i)=>{b.disabled=true;if(opts[i].correct)b.classList.add('correct');else if(opts[i].label===submitted)b.classList.add('wrong');});}
+ else {$('typedAnswer').disabled=true;$('submitAnswer').disabled=true;}
+ const box=$('feedback');box.className=`feedback ${correct?'good':'bad'}`;
+ $('checkPos').disabled=true;document.querySelectorAll('#posForm input').forEach(c=>c.disabled=true);
+ const detail=['pos','speech'].includes(q.kind)?`<strong>${escapeHTML(w.word)}</strong> is <strong>${escapeHTML(w.pos)}</strong>.`:`<strong>${escapeHTML(w.word)}</strong> — ${escapeHTML(w.definition)}.`;
+ box.innerHTML=`<strong>${correct?'✓ Nice work!':'✕ Not quite.'}</strong> ${correct?'':`The correct answer is <strong>${escapeHTML(['pos','speech'].includes(q.kind)?w.pos:q.kind==='definition'?w.definition:w.word)}</strong>.`}<p>${detail}</p>`;
+ $('next').textContent=index===questions.length-1?'See results →':'Next question →';$('next').classList.remove('hidden');$('next').focus();
+}
+$('answerForm').addEventListener('submit',e=>{e.preventDefault();if(answered)return;const typed=$('typedAnswer').value;if(!normalize(typed)){showValidation('Type a vocabulary word first.');$('typedAnswer').focus();return;}grade(normalize(typed)===normalize(questions[index].word.word),typed,null);});
+function showValidation(message){$('feedback').className='feedback';$('feedback').textContent=message;}
+$('posForm').addEventListener('submit',e=>{e.preventDefault();if(answered)return;const parts=[...document.querySelectorAll('#posForm input:checked')].map(c=>c.value);if(!parts.length){showValidation('Select at least one part of speech.');return;}const expected=questions[index].word.parts;grade(parts.length===expected.length&&expected.every(p=>parts.includes(p)),parts.join(' / '),null);});
+$('next').addEventListener('click',()=>{if(!answered)return;if(index+1<questions.length){index++;$('typedAnswer').disabled=false;$('submitAnswer').disabled=false;render();}else finish();});
+function finish(){page('results');const pct=Math.round(100*score/questions.length);$('percent').textContent=pct+'%';$('resultMessage').textContent=pct===100?'Perfect round! Every answer was right.':pct>=80?'Strong work! Review the few missed questions to make them stick.':pct>=50?'Good practice. A second round on missed questions will help.':'Keep going! Use the study list, then retry your missed questions.';
+ $('correctCount').textContent=`${score} / ${questions.length}`;$('wrongCount').textContent=questions.length-score;
+ const missed=attempts.filter(a=>!a.correct);$('retryMissed').disabled=missed.length===0;
+ $('review').innerHTML=attempts.map(a=>{const w=a.question.word;return `<div class="reviewItem"><strong>${a.correct?'✓':'✕'} ${escapeHTML(w.word)}</strong><span class="tag">${escapeHTML(w.pos)}</span><div><span>${escapeHTML(w.definition)}</span></div>${a.correct?'':`<div><span>Your answer: ${escapeHTML(a.submitted||'(blank)')}</span></div>`}</div>`;}).join('');
+ $('retryMissed').onclick=()=>start(mode,missed.map(a=>a.question));}
+for(const b of document.querySelectorAll('[data-mode]'))b.addEventListener('click',()=>start(b.dataset.mode));
+$('exit').addEventListener('click',()=>page('home'));$('again').addEventListener('click',()=>page('home'));
+$('showBank').addEventListener('click',()=>{$('bankSection').classList.remove('hidden');$('bankSection').scrollIntoView({behavior:'smooth'});});
+$('hideBank').addEventListener('click',()=>{$('bankSection').classList.add('hidden');});
+$('bank').innerHTML=WORDS.map(w=>`<div class="bankItem"><strong>${escapeHTML(w.word)} <small>· ${escapeHTML(w.pos)}</small></strong><p>${escapeHTML(w.definition)}</p><p><strong>Synonyms:</strong> ${escapeHTML(w.syn.join('; '))}</p><p><strong>Antonyms:</strong> ${escapeHTML(w.ant.join('; ')||'None listed')}</p></div>`).join('');
+document.addEventListener('keydown',e=>{
+ if($('quiz').classList.contains('hidden')||answered||isTyped(questions[index])||questions[index].kind==='speech'||e.altKey||e.ctrlKey||e.metaKey)return;
+ const digit=Number(e.key);const buttons=[...$('choices').children];if(digit>=1&&digit<=buttons.length)buttons[digit-1].click();
+});
+</script>
+</body>
+</html>
